@@ -58,4 +58,14 @@ public class ChunkData
             }
         }
     }
+
+    public bool IsVoxelInChunk(Vector3Int position)
+    {
+        return voxels.ContainsKey(position);
+    }
+
+    public VoxelData GetVoxel(Vector3Int position)
+    {
+        return IsVoxelInChunk(position) ? voxels[position] : null;
+    }
 }

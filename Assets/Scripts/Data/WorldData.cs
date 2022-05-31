@@ -28,7 +28,29 @@ public class WorldData
         {
             chunks[position] = new ChunkData(position);
         }
-        
+
         return chunks[position];
+    }
+
+    public VoxelData GetVoxelInWorld(Vector3Int globalPosition)
+    {
+        if (globalPosition.x < 0 || globalPosition.x > WorldConstants.WorldVoxelResolution - 1 ||
+            globalPosition.y < 0 || globalPosition.y > WorldConstants.ChunkHeight - 1 ||
+            globalPosition.z < 0 || globalPosition.z > WorldConstants.WorldVoxelResolution - 1)
+            return null;
+
+        var chunkX = Mathf.FloorToInt(globalPosition.x / WorldConstants.ChunkVoxelResolution) * WorldConstants.ChunkVoxelResolution;
+        var chunkZ = Mathf.FloorToInt(globalPosition.z / WorldConstants.ChunkVoxelResolution) * WorldConstants.ChunkVoxelResolution;
+
+        var chunkPosition = new Vector2Int(chunkX, chunkZ);
+
+        if (!chunks.ContainsKey(chunkPosition))
+            return null;
+
+        var chunk = chunks[chunkPosition];
+
+        var voxelLocalPosition = new Vector3Int(globalPosition.x - chunkX, globalPosition.y, globalPosition.z - chunkZ);
+
+        return chunk.voxels.ContainsKey(voxelLocalPosition) ? chunk.voxels[voxelLocalPosition] : null;
     }
 }

@@ -16,6 +16,4 @@ public class VoxelData
         this.position = position;
         this.neighbours = new VoxelData[WorldConstants.FacesPerVoxel];
     }
-
-
 }

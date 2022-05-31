@@ -7,7 +7,8 @@ public static class WorldConstants
     public static readonly Vector3Int[] directions = new[] { Vector3Int.back, Vector3Int.forward, Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right };
 
     public static readonly int ChunkVoxelResolution = 2;
-    public static int WorldChunkResolution = 5;
+    public static int WorldChunkResolution = 2;
+    public static int WorldVoxelResolution = ChunkVoxelResolution * WorldChunkResolution;
     public static int ChunkHeight = 5;
 
     // for better understanding

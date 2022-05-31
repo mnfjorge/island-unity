@@ -44,8 +44,16 @@ public class Chunk
 
             for (int directionIndex = 0; directionIndex < WorldConstants.directions.Length; directionIndex++)
             {
-                var neighbor = voxelData.neighbours[directionIndex];
-                if (neighbor != null) continue;
+                var neighborLocalPosition = voxelData.position + WorldConstants.directions[directionIndex];
+                if (chunkData.GetVoxel(neighborLocalPosition) != null)
+                    continue;
+                else
+                {
+                    var voxelGlobalPosition = new Vector3Int(chunkData.position.x + voxelData.position.x, voxelData.position.y, chunkData.position.y + voxelData.position.z);
+                    var neighborGlobalPosition = voxelGlobalPosition + WorldConstants.directions[directionIndex];
+                    if (World.Instance.worldData.GetVoxelInWorld(neighborGlobalPosition) != null)
+                        continue;
+                }
 
                 for (int i = 0; i < WorldConstants.VerticesPerFace; i++)
                 {
@@ -60,13 +68,5 @@ public class Chunk
         meshFilter.sharedMesh.vertices = vertices;
         meshFilter.sharedMesh.triangles = triangles;
         meshFilter.sharedMesh.RecalculateNormals();
-    }
-
-    public VoxelData GetVoxel(Vector3Int position)
-    {
-        if (!chunkData.voxels.ContainsKey(position))
-            return null;
-
-        return chunkData.voxels[position];
     }
 }
