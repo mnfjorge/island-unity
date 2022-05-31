@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,17 +6,39 @@ using UnityEngine;
 public class World : MonoBehaviour
 {
     public int seed = 0;
-    public int resolution = 2;
+
     public Material cubeMaterial;
     public Color cubeColor = Color.black;
 
-    public void GenerateCube()
-    {
-        for (int i = 0; i < this.transform.childCount; i++)
-        {
-            DestroyImmediate(this.transform.GetChild(i).gameObject);
-        }
+    public WorldData worldData;
 
-        new Chunk(this);
+    #region Singleton
+    private static World instance;
+    public static World Instance { get { return instance; } }
+
+    public World()
+    {
+        instance = this;
+
+        GenerateWorld();
+    }
+
+    #endregion
+
+    public void GenerateWorld()
+    {
+        worldData = new WorldData(seed);
+    }
+
+    public void Populate()
+    {
+        foreach (var chunkData in worldData.chunks.Values)
+        {
+            var existingChunk = transform.Find(chunkData.name);
+            if (existingChunk != null)
+                DestroyImmediate(existingChunk.gameObject);
+
+            new Chunk(chunkData).Generate();
+        }
     }
 }

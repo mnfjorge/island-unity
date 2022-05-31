@@ -14,12 +14,12 @@ public class CubeEditor : Editor
         {
             base.OnInspectorGUI();
             if (check.changed)
-                world.GenerateCube();
+                world.Populate();
         }
 
-        if (GUILayout.Button("Generate"))
+        if (GUILayout.Button("Populate"))
         {
-            world.GenerateCube();
+            world.Populate();
         }
     }
 
